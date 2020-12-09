@@ -1,4 +1,6 @@
 import tkinter as tk
+import tkinter.filedialog as fd
+from functools import partial
 
 class panel:
 
@@ -142,12 +144,11 @@ class panel:
         for x in self.file_prompts.keys():
 
             self.variables[x] = tk.StringVar()
-            print(self.variables[x])
             
             button = tk.Button(
                 frame_file_prompts, 
                 text = x,
-                command = self.file_prompts[x],
+                command = partial(self.get_file, x),
                 bg = self.bg
             )
             button.grid(
@@ -175,6 +176,7 @@ class panel:
         
         return frame_file_prompts
 
+
     def format(self, frame):
         
         frame.configure(
@@ -193,6 +195,16 @@ class panel:
         for i in range(numrows):
             frame.rowconfigure(i, weight = self.row_weight)
 
+    def get_file(self, widget_name):
+        if self.file_prompts[widget_name] == None:
+            self.file_prompts[widget_name] = (("all files", ".*"))
+        
+        file = fd.askopenfilename(
+            title = widget_name,
+            filetypes = self.file_prompts[widget_name]
+        )
+        self.variables[widget_name].set(file)
+        
 
 if __name__ == "__main__":
     
@@ -210,7 +222,7 @@ if __name__ == "__main__":
         "Entry"
     ]
     window_widgets.file_prompts = {
-        "File Prompt": None
+        "File Prompt": (("jpeg files","*.jpg"),("all files","*.*"))
     }
     window_widgets.dir_prompts = {
         "Directory Prompt": None
@@ -224,7 +236,28 @@ if __name__ == "__main__":
     red_popup.legend = "This pop up tests how things look on the pop up"
     red_popup.entries = {"Entry"}
 
-    red_popup.as_popup_from(window)  
+    red_popup.as_popup_from(window)
+
+    actual_app = panel()
+    actual_app.entries = {
+            "Title": None,
+            "Author": None,
+            "Author's Gender": None,
+            "Date": None,
+        }
+        
+    actual_app.file_prompts ={
+            "File Location": None,
+            "Database Location" : None
+        }
+        
+    actual_app.buttons = {
+            "About": None,
+            "Wiki": None,
+            "Submit": None
+        }
+
+    actual_app.as_popup_from(window)  
     
     window_widgets.overtake_window(window)
     window.mainloop()
