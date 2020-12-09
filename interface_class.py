@@ -11,14 +11,14 @@ class panel:
         # visual styling defaults
         self.title = ""
         self.widget_pad = 1
-        self.frame_pad = 5
+        self.frame_pad = 3
         self.sticky = "nsew"
         self.bg = "RosyBrown1"
         self.col_a_width = 100  #
         self.col_b_width = 200
         self.text_wrap = 300
-        self.borderwidth = 2
-        self.relief = "ridge"
+        self.borderwidth = 0
+        self.relief = "sunk"
         self.text_justify = tk.CENTER
         self.column_weight = 1
         self.row_weight = 1
@@ -48,6 +48,8 @@ class panel:
             widget_frames.append(self.frame_entries(parent))
         if len(self.file_prompts) > 0:
             widget_frames.append(self.frame_file_prompts(parent))
+        if len(self.dir_prompts) > 0:
+            widget_frames.append(self.frame_dir_prompts(parent))
         
         row_cnt = 0
         for x in widget_frames:
@@ -148,7 +150,7 @@ class panel:
             button = tk.Button(
                 frame_file_prompts, 
                 text = x,
-                command = partial(self.get_file, x),
+                command = partial(self.get_file_location, x),
                 bg = self.bg
             )
             button.grid(
@@ -161,7 +163,10 @@ class panel:
             label = tk.Label(
                 frame_file_prompts, 
                 textvariable = self.variables[x],
+                wraplength = self.col_b_width,
                 relief = tk.SUNKEN,
+                anchor = "nw",
+                justify = tk.LEFT
             )
             label.grid(
                 row = row_cnt, 
@@ -176,6 +181,46 @@ class panel:
         
         return frame_file_prompts
 
+    def frame_dir_prompts(self, parent_frame):
+        frame_dir_prompts = tk.Frame(parent_frame)
+        frame_dir_prompts.columnconfigure(0, minsize = self.col_a_width)
+        frame_dir_prompts.columnconfigure(1, minsize = self.col_b_width)
+        row_cnt = 0
+
+        for x in self.dir_prompts.keys():
+
+            self.variables[x] = tk.StringVar()
+            
+            button = tk.Button(
+                frame_dir_prompts, 
+                text = x,
+                command = None, #partial(self.get_dir_location, x),
+                bg = self.bg
+            )
+            button.grid(
+                row = row_cnt, 
+                column = 0, 
+                sticky = self.sticky, 
+                padx = self.widget_pad, 
+                pady = self.widget_pad
+            )
+            label = tk.Label(
+                frame_dir_prompts, 
+                textvariable = self.variables[x],
+                relief = tk.SUNKEN,
+            )
+            label.grid(
+                row = row_cnt, 
+                column = 1, 
+                sticky = self.sticky, 
+                padx = self.widget_pad, 
+                pady = self.widget_pad,
+            )
+            
+
+            row_cnt = row_cnt + 1
+        
+        return frame_dir_prompts
 
     def format(self, frame):
         
@@ -195,7 +240,7 @@ class panel:
         for i in range(numrows):
             frame.rowconfigure(i, weight = self.row_weight)
 
-    def get_file(self, widget_name):
+    def get_file_location(self, widget_name):
         if self.file_prompts[widget_name] == None:
             self.file_prompts[widget_name] = (("all files", ".*"))
         
@@ -230,34 +275,34 @@ if __name__ == "__main__":
 
     
     
-    red_popup = panel()
-    red_popup.title = "frame in red"
-    red_popup.bg = "red"
-    red_popup.legend = "This pop up tests how things look on the pop up"
-    red_popup.entries = {"Entry"}
+    # red_popup = panel()
+    # red_popup.title = "frame in red"
+    # red_popup.bg = "red"
+    # red_popup.legend = "This pop up tests how things look on the pop up"
+    # red_popup.entries = {"Entry"}
 
-    red_popup.as_popup_from(window)
+    # red_popup.as_popup_from(window)
 
-    actual_app = panel()
-    actual_app.entries = {
-            "Title": None,
-            "Author": None,
-            "Author's Gender": None,
-            "Date": None,
-        }
+    # actual_app = panel()
+    # actual_app.entries = {
+    #         "Title": None,
+    #         "Author": None,
+    #         "Author's Gender": None,
+    #         "Date": None,
+    #     }
         
-    actual_app.file_prompts ={
-            "File Location": None,
-            "Database Location" : None
-        }
+    # actual_app.file_prompts ={
+    #         "File Location": None,
+    #         "Database Location" : None
+    #     }
         
-    actual_app.buttons = {
-            "About": None,
-            "Wiki": None,
-            "Submit": None
-        }
+    # actual_app.buttons = {
+    #         "About": None,
+    #         "Wiki": None,
+    #         "Submit": None
+    #     }
 
-    actual_app.as_popup_from(window)  
+    # actual_app.as_popup_from(window)  
     
     window_widgets.overtake_window(window)
     window.mainloop()
