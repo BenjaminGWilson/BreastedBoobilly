@@ -27,7 +27,7 @@ class panel:
         self.file_prompts = {}
         self.dir_prompts = {}
         self.buttons = {}
-
+        
         # containers for input data
         self.variables = {}
 
@@ -70,8 +70,6 @@ class panel:
         self.as_frames_in(pop_up)
         self.format(pop_up)
         pop_up.focus()
-
-        
 
     def frame_legend(self,parent_frame):
 
@@ -142,6 +140,10 @@ class panel:
         row_cnt = 0
     
         for x in self.file_prompts.keys():
+
+            self.variables[x] = tk.StringVar()
+            print(self.variables[x])
+            
             button = tk.Button(
                 frame_file_prompts, 
                 text = x,
@@ -157,7 +159,7 @@ class panel:
             )
             label = tk.Label(
                 frame_file_prompts, 
-                textvariable = self.file_prompts[x],
+                textvariable = self.variables[x],
                 relief = tk.SUNKEN,
             )
             label.grid(
@@ -167,6 +169,8 @@ class panel:
                 padx = self.widget_pad, 
                 pady = self.widget_pad,
             )
+            
+
             row_cnt = row_cnt + 1
         
         return frame_file_prompts
