@@ -25,8 +25,8 @@ class Panel:
 
         # Each of these containers is a list
         self.legend = ""
-        self.entries = {}       
-        self.file_prompts = {}
+        self.entries = []       
+        self.file_prompts = {}  # Key is button name, value is accepted file types
         self.dir_prompts = []
         self.buttons = {}
         
