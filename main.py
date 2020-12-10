@@ -1,5 +1,11 @@
 import tkinter as tk
 
-import panels
+from Panel_class import Panel
+import panels as p
 
-window = tk.Tk()
+root = tk.Tk()
+
+main = p.main_input()
+main.overtake_window(root)
+
+root.mainloop()
