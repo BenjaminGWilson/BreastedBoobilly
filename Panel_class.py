@@ -8,7 +8,7 @@ class panel:
         
         self.window = None
 
-        # visual styling defaults
+        # This attributes determine widget and frame styling.
         self.title = ""
         self.widget_pad = 4
         self.frame_pad = 0
@@ -23,14 +23,14 @@ class panel:
         self.column_weight = 1
         self.row_weight = 1
 
-        # widgets on panel
+        # Each of these containers is a list
         self.legend = ""
         self.entries = {}       
         self.file_prompts = {}
-        self.dir_prompts = {}
+        self.dir_prompts = []
         self.buttons = {}
         
-        # containers for input data
+        # Data collected through widgets is put here.
         self.variables = {}
 
     def overtake_window(self, window):
@@ -187,7 +187,7 @@ class panel:
         frame_dir_prompts.columnconfigure(1, minsize = self.col_b_width)
         row_cnt = 0
 
-        for x in self.dir_prompts.keys():
+        for x in self.dir_prompts:
 
             self.variables[x] = tk.StringVar()
             
@@ -251,13 +251,11 @@ class panel:
         self.variables[widget_name].set(file)
     
     def get_dir_location(self, widget_name):
-        if self.dir_prompts[widget_name] == None:
-            self.dir_prompts[widget_name] = (("all files", ".*"))
         
-        file = fd.askdirectory(
+        directory = fd.askdirectory(
             title = widget_name
         )
-        self.variables[widget_name].set(file)
+        self.variables[widget_name].set(directory)
         
 
 if __name__ == "__main__":
@@ -278,9 +276,9 @@ if __name__ == "__main__":
     window_widgets.file_prompts = {
         "File Prompt": (("jpeg files","*.jpg"),("all files","*.*"))
     }
-    window_widgets.dir_prompts = {
-        "Directory Prompt": None
-    }
+    window_widgets.dir_prompts = [
+        "Directory Prompt"
+    ]
 
     
     
