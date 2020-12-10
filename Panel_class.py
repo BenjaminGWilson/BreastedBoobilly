@@ -2,13 +2,13 @@ import tkinter as tk
 import tkinter.filedialog as fd
 from functools import partial
 
-class panel:
+class Panel:
 
     def __init__(self):
         
         self.window = None
 
-        # This attributes determine widget and frame styling.
+        # These attributes determine widget and frame styling.
         self.title = ""
         self.widget_pad = 4
         self.frame_pad = 0
@@ -50,6 +50,8 @@ class panel:
             widget_frames.append(self.frame_file_prompts(parent))
         if self.dir_prompts:
             widget_frames.append(self.frame_dir_prompts(parent))
+        if self.buttons:
+            widget_frames.append(self.frame_buttons(parent))
         
         row_cnt = 0
         for x in widget_frames:
@@ -66,9 +68,7 @@ class panel:
         self.format(parent)
 
     def as_popup_from(self, parent):
-        pop_up = tk.Toplevel(parent)
-        self.window = pop_up
-        
+        pop_up = tk.Toplevel(parent)        
         pop_up.title(self.title)
         pop_up.lift()
         self.as_frames_in(pop_up)
@@ -224,6 +224,28 @@ class panel:
         
         return frame_dir_prompts
 
+    def frame_buttons(self, parent_frame):
+        frame_buttons = tk.Frame(parent_frame)
+        row_cnt = 0
+
+        for x in self.buttons.keys():
+            print (x)          
+            button = tk.Button(
+                frame_buttons, 
+                text = x,
+                command = self.buttons[x],
+                bg = self.bg
+            )
+            button.grid(
+                row = 0, 
+                column = row_cnt, 
+                sticky = self.sticky, 
+                padx = self.widget_pad, 
+                pady = self.widget_pad
+            )
+            row_cnt = row_cnt + 1
+        return frame_buttons
+            
     def format(self, frame):
         
         frame.configure(
@@ -261,10 +283,13 @@ class panel:
 if __name__ == "__main__":
     
     window = tk.Tk()
+    red_popup = Panel()
+    actual_app = Panel()
+
     window.lift()
 
     
-    window_widgets = panel()
+    window_widgets = Panel()
     window_widgets.title = "Main Window"
     window_widgets.legend = (
         "this is the root frame. it should be all one colour, resizable in both directions,"
@@ -279,37 +304,37 @@ if __name__ == "__main__":
     window_widgets.dir_prompts = [
         "Directory Prompt"
     ]
-
+    window_widgets.buttons ={
+        "button": partial(red_popup.as_popup_from, window),
+        "button2": partial(print, "button press again"),
+        "button3": partial(actual_app.as_popup_from, window)
+    }
     
     
-    # red_popup = panel()
-    # red_popup.title = "frame in red"
-    # red_popup.bg = "red"
-    # red_popup.legend = "This pop up tests how things look on the pop up"
-    # red_popup.entries = {"Entry"}
 
-    # red_popup.as_popup_from(window)
+    red_popup.title = "frame in red"
+    red_popup.bg = "red"
+    red_popup.legend = "This pop up tests how things look on the pop up"
+    red_popup.entries = {"Entry"}
 
-    # actual_app = panel()
-    # actual_app.entries = {
-    #         "Title": None,
-    #         "Author": None,
-    #         "Author's Gender": None,
-    #         "Date": None,
-    #     }
+    actual_app.entries = {
+            "Title": None,
+            "Author": None,
+            "Author's Gender": None,
+            "Date": None,
+        }
         
-    # actual_app.file_prompts ={
-    #         "File Location": None,
-    #         "Database Location" : None
-    #     }
+    actual_app.file_prompts ={
+            "File Location": None,
+            "Database Location" : None
+        }
         
-    # actual_app.buttons = {
-    #         "About": None,
-    #         "Wiki": None,
-    #         "Submit": None
-    #     }
+    actual_app.buttons = {
+            "About": None,
+            "Wiki": None,
+            "Submit": None
+        }
 
-    # actual_app.as_popup_from(window)  
     
     window_widgets.overtake_window(window)
     window.mainloop()
