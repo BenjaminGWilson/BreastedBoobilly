@@ -10,11 +10,11 @@ class panel:
 
         # visual styling defaults
         self.title = ""
-        self.widget_pad = 1
-        self.frame_pad = 3
+        self.widget_pad = 4
+        self.frame_pad = 0
         self.sticky = "nsew"
         self.bg = "RosyBrown1"
-        self.col_a_width = 100  #
+        self.col_a_width = 150  #
         self.col_b_width = 200
         self.text_wrap = 300
         self.borderwidth = 0
@@ -42,13 +42,13 @@ class panel:
         self.window = parent
         widget_frames = []
         
-        if len(self.legend) > 0:
+        if self.legend:
             widget_frames.append(self.frame_legend(parent))
-        if len(self.entries) > 0:
+        if self.entries:
             widget_frames.append(self.frame_entries(parent))
-        if len(self.file_prompts) > 0:
+        if self.file_prompts:
             widget_frames.append(self.frame_file_prompts(parent))
-        if len(self.dir_prompts) > 0:
+        if self.dir_prompts:
             widget_frames.append(self.frame_dir_prompts(parent))
         
         row_cnt = 0
