@@ -228,8 +228,7 @@ class Panel:
         frame_buttons = tk.Frame(parent_frame)
         row_cnt = 0
 
-        for x in self.buttons.keys():
-            print (x)          
+        for x in self.buttons.keys():       
             button = tk.Button(
                 frame_buttons, 
                 text = x,
