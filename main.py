@@ -7,7 +7,7 @@ from functools import partial
 from Panel_class import Panel
 
 
-def input_panel():
+def make_input_panel():
 
     input_panel = Panel()
     input_panel.title = "Genital Counter"
@@ -22,20 +22,25 @@ def input_panel():
         "Database location": (("database file", "*db"),)
     }
     input_panel.buttons = {
-        "About": partial(about().as_popup_from, root),
+        "About": partial(make_about().as_popup_from, root),
         "Wiki": None,
         "Submit": None
     }
     return input_panel
 
-def about():
+def make_about():
     about = Panel()
     about.title = "About"
     about.legend = ("This is some gumph about the program"
                 "and all the things it is etc etc")
+    # about.buttons = {
+    #     "close program test": input_panel.destroy
+    # }
+
+    #this blanked out till dictionarising is done
     return about
 
 root = tk.Tk()
-main_input_window = input_panel()
-main_input_window.overtake_window(root)
+input_panel = make_input_panel()
+input_panel.overtake_window(root)
 root.mainloop()

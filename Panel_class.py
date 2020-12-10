@@ -281,7 +281,7 @@ class Panel:
     def destroy(self):
         self.window.destroy()
 
-if __name__ == "__main__":
+if __name__ == "__main__":  #delete this before release
     
     window = tk.Tk()
     red_popup = Panel()
