@@ -278,6 +278,8 @@ class Panel:
         )
         self.variables[widget_name].set(directory)
         
+    def destroy(self):
+        self.window.destroy()
 
 if __name__ == "__main__":
     
@@ -305,7 +307,7 @@ if __name__ == "__main__":
     ]
     window_widgets.buttons ={
         "button": partial(red_popup.as_popup_from, window),
-        "button2": partial(print, "button press again"),
+        "button2": red_popup.destroy,
         "button3": partial(actual_app.as_popup_from, window)
     }
     
