@@ -194,7 +194,7 @@ class panel:
             button = tk.Button(
                 frame_dir_prompts, 
                 text = x,
-                command = None, #partial(self.get_dir_location, x),
+                command = partial(self.get_dir_location, x),
                 bg = self.bg
             )
             button.grid(
@@ -208,6 +208,8 @@ class panel:
                 frame_dir_prompts, 
                 textvariable = self.variables[x],
                 relief = tk.SUNKEN,
+                anchor="nw",
+                justify = tk.LEFT
             )
             label.grid(
                 row = row_cnt, 
@@ -243,10 +245,17 @@ class panel:
     def get_file_location(self, widget_name):
         if self.file_prompts[widget_name] == None:
             self.file_prompts[widget_name] = (("all files", ".*"))
-        
         file = fd.askopenfilename(
             title = widget_name,
-            filetypes = self.file_prompts[widget_name]
+            filetypes = self.file_prompts[widget_name])
+        self.variables[widget_name].set(file)
+    
+    def get_dir_location(self, widget_name):
+        if self.dir_prompts[widget_name] == None:
+            self.dir_prompts[widget_name] = (("all files", ".*"))
+        
+        file = fd.askdirectory(
+            title = widget_name
         )
         self.variables[widget_name].set(file)
         
