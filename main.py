@@ -71,8 +71,8 @@ def make_about():
     return about
 
 def make_incomplete_warning(panels):
-    def next_window(this_window):
-        this_window.destroy()
+    def next_window(this_panel):
+        this_panel.destroy()
         if database_field_empty() == True:
             panels["new_db_prompt"].as_popup_from(root)
         else:
@@ -97,12 +97,12 @@ def make_missing_essential():
 
 def make_new_db_prompt():
 
-    def next_window(this_window):
-        new_db_location =   (this_window.variables["Choose directory"].get() 
+    def next_window(this_panel):
+        new_db_location =   (this_panel.variables["Choose directory"].get() 
                             + "/"
-                            + this_window.variables["New database name"].get())
-        panels["input_panel"].set(new_db_location)
-        this_window.destroy()
+                            + this_panel.variables["New database name"].get())
+        panels["input_panel"].variables["Database location"].set(new_db_location)
+        this_panel.destroy()
 
     new_db_prompt = Panel()
     new_db_prompt.legend = ("You haven't named a database to store your results in."
@@ -111,7 +111,8 @@ def make_new_db_prompt():
     new_db_prompt.dir_prompts = ("Choose directory",)
     new_db_prompt.buttons = {
         "Yes": partial(next_window, new_db_prompt),
-        "No": new_db_prompt.destroy
+        "No, I'll link to an existing database": new_db_prompt.destroy,
+        "No, I don't want to export to a database": partial(print, "hohohoh")
     }
     return new_db_prompt
 
