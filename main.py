@@ -1,12 +1,19 @@
-# This file contains all information needed for launching the interface.
-# SQL and line splitting functions are in ________________
+# This file contains all information needed to describe the GUI
+# input checking etc is in input_checks
+
+# Text analysis 
 
 import tkinter as tk
 from functools import partial 
 
 from Panel_class import Panel
 
-
+"""
+how about:
+initialise list of GUI panels
+turn list into dict, value = Panel()
+send dict to a module function that formats everything
+"""
 def make_input_panel():
 
     input_panel = Panel()
