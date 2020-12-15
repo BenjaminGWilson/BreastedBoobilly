@@ -25,7 +25,7 @@ class Panel:
 
         # Each of these containers is a list
         self.legend = ""
-        self.entries = []       
+        self.entries = {}    
         self.file_prompts = {}  # Key is button name, value is accepted file types
         self.dir_prompts = []
         self.buttons = {}
@@ -105,6 +105,8 @@ class Panel:
             
         for x in self.entries:
             
+            entry_variable = tk.StringVar()
+            
             label = tk.Label(
                 frame_entries, 
                 text = x, 
@@ -113,7 +115,8 @@ class Panel:
             )
 
             entry = tk.Entry(
-                frame_entries
+                frame_entries,
+                textvariable = entry_variable
             )
 
             label.grid(
@@ -132,7 +135,7 @@ class Panel:
                 pady = self.widget_pad
             )
             
-            self.entries[x] = entry
+            self.variables[x] = entry_variable
             row_cnt = row_cnt + 1
         
         return frame_entries

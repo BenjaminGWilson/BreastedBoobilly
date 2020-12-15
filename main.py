@@ -71,7 +71,19 @@ def make_incomplete_warning():
     return incomplete_warning
 
 def submit_input(input_panel):
-    user_input = {
-        "title" : input_panel.
-    }
+    
+    user_input = [
+        "Title",
+        "Author",
+        "Author's Gender",
+        "Date",
+        "Text location",
+        "Database location"   
+    ]
+    user_input = dict.fromkeys(user_input)
+    
+    for x in user_input:
+        user_input[x] = input_panel.variables[x].get()
+
+
 launch_gui()
