@@ -8,46 +8,70 @@ from functools import partial
 
 from Panel_class import Panel
 
-"""
-how about:
-initialise list of GUI panels
-turn list into dict, value = Panel()
-send dict to a module function that formats everything
-"""
-def make_input_panel():
+root = tk.Tk()
 
-    input_panel = Panel()
-    input_panel.title = "Genital Counter"
-    input_panel.entries = [
+def launch_gui():
+    panels = make_gui_panels()
+    panels["input_panel"].overtake_window(root)
+    root.mainloop()
+
+def make_gui_panels():
+    panels = [
+        "input_panel",      #this is the main window
+        "about",            #general information about the program/company
+        "incomplete_warning"    #warns there are empty inputs
+    ]
+    panels = dict.fromkeys(panels, Panel())
+    
+    # format pop ups before the window that calls them, else you call a blank window
+    panels["incomplete_warning"] = make_incomplete_warning()
+    panels["about"] = make_about()
+    panels["input_panel"] = make_input_panel(panels)
+
+
+    return panels
+
+def make_input_panel(panels): 
+    panel = Panel()
+    panel.title = "Genital Counter"
+    panel.entries = [
         "Title",
         "Author",
         "Author's Gender",
         "Date",
     ]
-    input_panel.file_prompts = {
+    panel.file_prompts = {
         "Text location": (("text file","*.txt"),("all files","*.*")),
         "Database location": (("database file", "*db"),)
     }
-    input_panel.buttons = {
-        "About": partial(make_about().as_popup_from, root),
-        "Wiki": None,
-        "Submit": None
+    panel.buttons = {
+        "About": partial(panels["about"].as_popup_from, root),
+        "Wiki": partial(panels["incomplete_warning"].as_popup_from,root),
+        "Submit": partial(submit_input, panel)
     }
-    return input_panel
+    return panel
 
 def make_about():
     about = Panel()
     about.title = "About"
     about.legend = ("This is some gumph about the program"
                 "and all the things it is etc etc")
-    # about.buttons = {
-    #     "close program test": input_panel.destroy
-    # }
-
-    #this blanked out till dictionarising is done
+    about.buttons = {
+        "close program test": about.destroy
+    }
     return about
 
-root = tk.Tk()
-input_panel = make_input_panel()
-input_panel.overtake_window(root)
-root.mainloop()
+def make_incomplete_warning():
+    incomplete_warning = Panel()
+    incomplete_warning.legend = "There are empty fields. Do you want to continue"
+    incomplete_warning.buttons = {
+        "Yes": incomplete_warning.destroy, 
+        "No": incomplete_warning.destroy
+    }
+    return incomplete_warning
+
+def submit_input(input_panel):
+    user_input = {
+        "title" : input_panel.
+    }
+launch_gui()

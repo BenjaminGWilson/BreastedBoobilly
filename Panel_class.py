@@ -132,6 +132,7 @@ class Panel:
                 pady = self.widget_pad
             )
             
+            self.entries[x] = entry
             row_cnt = row_cnt + 1
         
         return frame_entries
@@ -296,9 +297,9 @@ if __name__ == "__main__":  #delete this before release
         "this is the root frame. it should be all one colour, resizable in both directions,"
         " and have no visual problems"
     ) 
-    window_widgets.entries =[
-        "Entry"
-    ]
+    window_widgets.entries ={
+        "Entry" : None
+    }
     window_widgets.file_prompts = {
         "File Prompt": (("jpeg files","*.jpg"),("all files","*.*"))
     }
