@@ -70,10 +70,11 @@ class Panel:
     def as_popup_from(self, parent):
         pop_up = tk.Toplevel(parent)        
         pop_up.title(self.title)
-        pop_up.lift()
+        pop_up.focus_get()
         self.as_frames_in(pop_up)
         self.format(pop_up)
         pop_up.focus()
+        pop_up.grab_set()
 
     def frame_legend(self,parent_frame):
 
