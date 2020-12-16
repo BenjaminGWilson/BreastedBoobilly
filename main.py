@@ -25,13 +25,15 @@ def make_gui_panels():
         "about",            # general information about the program/company
         "incomplete_warning",    # warns there are empty inputs
         "missing_essential",     # warns essential information hasn't been input
-        "new_db_prompt",    # if user doesn't suggest a db, this prompts them to make a new one      
+        "missing_db_prompt",    # if user doesn't suggest a db, this prompts them to make a new one
+        "new_database"     #prompts for location and title of new database      
 
     ]
     panels = dict.fromkeys(panels, Panel())
     
     # format pop ups before the window that calls them, else you call a blank window
-    panels["new_db_prompt"] = make_new_db_prompt()
+    panels["new_database"] = make_new_database()
+    panels["missing_db_prompt"] = make_missing_db_prompt()
     panels["missing_essential"] = make_missing_essential()
     panels["incomplete_warning"] = make_incomplete_warning(panels)
     panels["about"] = make_about()
@@ -74,9 +76,9 @@ def make_incomplete_warning(panels):
     def next_window(this_panel):
         this_panel.destroy()
         if database_field_empty() == True:
-            panels["new_db_prompt"].as_popup_from(root)
+            panels["missing_db_prompt"].as_popup_from(root)
         else:
-            process_text
+            process()
     
     incomplete_warning = Panel()
     incomplete_warning.legend = "There are empty fields. Do you want to continue"
@@ -95,26 +97,41 @@ def make_missing_essential():
     }
     return missing_essential
 
-def make_new_db_prompt():
+def make_missing_db_prompt():
+    def yes_button(this_window):
+        this_window.destroy()
+        panels["new_database"].as_popup_from(root)
+    def no_button(this_window):
+        this_window.destroy()
+        process()
 
+    missing_db_prompt = Panel()
+    missing_db_prompt.legend = ("You haven't named a database to store your results in."
+                                " Would you like to make a new one?")
+    missing_db_prompt.buttons = {
+            "Yes": partial(yes_button, missing_db_prompt),
+            "No, I'll link to an existing database": missing_db_prompt.destroy,
+            "No, I don't want to export to a database": partial(no_button, missing_db_prompt)
+        }
+    missing_db_prompt.sticky = ""
+    return missing_db_prompt
+
+def make_new_database():
     def next_window(this_panel):
         new_db_location =   (this_panel.variables["Choose directory"].get() 
                             + "/"
                             + this_panel.variables["New database name"].get())
         panels["input_panel"].variables["Database location"].set(new_db_location)
         this_panel.destroy()
-
-    new_db_prompt = Panel()
-    new_db_prompt.legend = ("You haven't named a database to store your results in."
-                            " Would you like to make a new one?")
-    new_db_prompt.entries = ("New database name",)
-    new_db_prompt.dir_prompts = ("Choose directory",)
-    new_db_prompt.buttons = {
-        "Yes": partial(next_window, new_db_prompt),
-        "No, I'll link to an existing database": new_db_prompt.destroy,
-        "No, I don't want to export to a database": partial(print, "hohohoh")
+    
+    new_database = Panel()
+    new_database.dir_prompts = ("Choose directory",)
+    new_database.entries = ("New database name",)
+    new_database.buttons = {
+        "Create new database": partial(next_window, new_database),
+        "Cancel": new_database.destroy
     }
-    return new_db_prompt
+    return new_database
 
 def submit_input(input_panel):
     global user_input
@@ -140,6 +157,11 @@ def check_optional_fields():
         if user_input[x] == None:
             panels["incomplete_warning"].as_popup_from(root)
             return
+    if database_field_empty() == True:
+        print("db test works")
+        panels["missing_db_prompt"].as_popup_from(root)
+    else:
+        process()
 
 def database_field_empty():
     if user_input["Database location"] == None:
