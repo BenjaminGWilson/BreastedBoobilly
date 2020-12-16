@@ -6,8 +6,8 @@
 # function that counts tuples for each possesive 
 # and returns word_tallys[]: total objects, total body, total internal, total external, total each area
 
-class Word_tally(self)
-    def __init__():
+class Word_tally:
+    def __init__(self):
         self.total_owned = 0
         self.total_body = 0
         self.internal = 0
@@ -19,3 +19,16 @@ class Word_tally(self)
         self.torso = 0
         self.head = 0
         self.other = 0
+    
+    def total(self):
+        self.total_body = (
+        self.internal
+        + self.feet
+        + self.legs
+        + self.hands
+        + self.arms
+        + self.nethers
+        + self.torso
+        + self.head
+        + self.other 
+        )
