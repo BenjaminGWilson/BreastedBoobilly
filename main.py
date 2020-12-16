@@ -25,11 +25,13 @@ Text processing and SQL commands live in the text_analysis module.
 
 """
 
-
+#standard modules
 import tkinter as tk
 from functools import partial 
 
+#local modules
 from Panel_class import Panel
+import text_analysis as text
 
 # globals
 root = tk.Tk()
