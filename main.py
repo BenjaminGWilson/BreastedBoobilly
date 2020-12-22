@@ -29,6 +29,7 @@ Text processing and SQL commands live in the text_analysis module.
 import tkinter as tk
 from functools import partial
 
+
 # local modules
 from Panel_class import Panel
 import text_analysis as text
@@ -218,7 +219,7 @@ def database_field_empty():
 
 def process():
     panels["processing"].as_popup_from(root)
-    text.read(user_input, panels["processing"].variables)
+    text.read(user_input, panels["processing"])
 
 
 launch_gui()

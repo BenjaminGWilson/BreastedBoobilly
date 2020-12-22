@@ -42,15 +42,21 @@ class ownership:
         self.noun = noun
         self.adjective = adjective
 
-def read(user_input, displays):
+def read(user_input, display):
     words = get_words(user_input["Text location"])
-    body_parts = get_words("body_parts.txt")
+    #body_parts = get_words("body_parts.txt")
     
-    displays["Length of text:"].set(len(words))
+    display.variables["Length of text:"].set(len(words))
+    display.variables["Words processed:"].set("0")
 
 
     for i in range(len(words)):
-        increment_widget(displays["Words processed:"])
+        if i % 45 == 0:
+            display.variables["Words processed:"].set(i)
+            display.variables["Current word:"].set(words[i])
+            display.window.update()
+        print(words[i])
+
 
 def get_words(text_location):
     with io.open(text_location, "r", encoding="utf-8") as file:
@@ -59,11 +65,3 @@ def get_words(text_location):
     file.close()
     return words
 
-def increment_widget(widget):
-    current_value = widget.get()
-    if current_value:
-        widget.set(
-            int(current_value) + 1
-        )
-    else:
-        widget.set("0")
