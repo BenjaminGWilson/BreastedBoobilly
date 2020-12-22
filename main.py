@@ -206,7 +206,6 @@ def check_optional_fields():
             panels["incomplete_warning"].as_popup_from(root)
             return
     if database_field_empty() == True:
-        print("db test works")
         panels["missing_db_prompt"].as_popup_from(root)
     else:
         process()
@@ -219,7 +218,7 @@ def database_field_empty():
 
 def process():
     panels["processing"].as_popup_from(root)
-    print(panels["processing"].variables)
+    text.read(user_input, panels["processing"].variables)
 
 
 launch_gui()
