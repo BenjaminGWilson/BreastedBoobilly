@@ -1,13 +1,8 @@
-#define Word_tally class for returning final counts
-# receive user input + tkvariable for updating display (maybe 2, one that 
-# can be the words being processed?)
 # check that db, if supplied, has correct tables (add them if not)
-# load and test dictionaries
 # function that turns novel into tuples of ownership
 # function that counts tuples for each possesive 
 # and returns word_tallys[]: total objects, total body, total internal, total external, total each area
 
-import time  #for testing, delete
 import io # used to open non-unicode files
 class Word_tally:
     def __init__(self):
@@ -40,7 +35,7 @@ class ownership:
     def __init__(self, possesive, noun, adjective):
         self.possesive = possesive
         self.noun = noun
-        self.adjective = adjective
+        # self.adjective = adjective    #leave till next version
 
 def read(user_input, display):
     words = get_words(user_input["Text location"])
