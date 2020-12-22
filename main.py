@@ -1,8 +1,8 @@
 """
-This program searches through long form text (ie novels) for use of 
+This program searches through long form text (ie novels) for use of
 possesive pronouns (ie his, her, their). When it finds one it tries
 to work out whether it's a body part that's being owned. If it is
-a body part then the program records that against the pronoun. 
+a body part then the program records that against the pronoun.
 
 Once a full count is complete the program does some basic analysis
 of the numbers and then presents graphed summaries of it's findings.
@@ -12,7 +12,7 @@ in depth and intertextual analysis via SQL.
 
 If you use this program in your research, please let me know!
 Information about correct referencing can be found in the 'About'
-panel. 
+panel.
 
 If you want to edit the code, and anything isn't clear here, there's a
 map of the code in the documentation.
@@ -25,11 +25,11 @@ Text processing and SQL commands live in the text_analysis module.
 
 """
 
-#standard modules
+# standard modules
 import tkinter as tk
-from functools import partial 
+from functools import partial
 
-#local modules
+# local modules
 from Panel_class import Panel
 import text_analysis as text
 
@@ -38,11 +38,13 @@ root = tk.Tk()
 user_input = {}
 panels = {}
 
+
 def launch_gui():
     global panels
     panels = make_gui_panels()
     panels["input_panel"].overtake_window(root)
     root.mainloop()
+
 
 def make_gui_panels():
     panels = [
@@ -51,12 +53,14 @@ def make_gui_panels():
         "incomplete_warning",    # warns there are empty inputs
         "missing_essential",     # warns essential information hasn't been input
         "missing_db_prompt",    # if user doesn't suggest a db, this prompts them to make a new one
-        "new_database"     #prompts for location and title of new database      
+        "new_database",  # prompts for location and title of new database
+        "processing"    # screen to look at as data is processed
 
     ]
     panels = dict.fromkeys(panels, Panel())
-    
+
     # format pop ups before the window that calls them, else you call a blank window
+    panels["processing"] = make_processing()
     panels["new_database"] = make_new_database()
     panels["missing_db_prompt"] = make_missing_db_prompt()
     panels["missing_essential"] = make_missing_essential()
@@ -64,10 +68,10 @@ def make_gui_panels():
     panels["about"] = make_about()
     panels["input_panel"] = make_input_panel(panels)
 
-
     return panels
 
-def make_input_panel(panels): 
+
+def make_input_panel(panels):
     panel = Panel()
     panel.title = "Genital Counter"
     panel.entries = [
@@ -77,7 +81,7 @@ def make_input_panel(panels):
         "Date",
     ]
     panel.file_prompts = {
-        "Text location": (("text file","*.txt"),("all files","*.*")),
+        "Text location": (("text file", "*.txt"), ("all files", "*.*")),
         "Database location": (("database file", "*db"),)
     }
     panel.buttons = {
@@ -86,6 +90,7 @@ def make_input_panel(panels):
         "Submit": partial(submit_input, panel)
     }
     return panel
+
 
 def make_about():
     about = Panel()
@@ -97,6 +102,7 @@ def make_about():
     }
     return about
 
+
 def make_incomplete_warning(panels):
     def next_window(this_panel):
         this_panel.destroy()
@@ -104,28 +110,31 @@ def make_incomplete_warning(panels):
             panels["missing_db_prompt"].as_popup_from(root)
         else:
             process()
-    
+
     incomplete_warning = Panel()
     incomplete_warning.legend = "There are empty fields. Do you want to continue"
     incomplete_warning.buttons = {
-        "Yes": partial(next_window,incomplete_warning), 
+        "Yes": partial(next_window, incomplete_warning),
         "No": incomplete_warning.destroy
     }
     return incomplete_warning
+
 
 def make_missing_essential():
     missing_essential = Panel()
     missing_essential.legend = ("Please fill in the the title and location"
                                 " of the text you want to analyse.")
     missing_essential.buttons = {
-        "Ok": missing_essential.destroy, 
+        "Ok": missing_essential.destroy,
     }
     return missing_essential
+
 
 def make_missing_db_prompt():
     def yes_button(this_window):
         this_window.destroy()
         panels["new_database"].as_popup_from(root)
+
     def no_button(this_window):
         this_window.destroy()
         process()
@@ -141,14 +150,16 @@ def make_missing_db_prompt():
     missing_db_prompt.sticky = ""
     return missing_db_prompt
 
+
 def make_new_database():
     def next_window(this_panel):
-        new_db_location =   (this_panel.variables["Choose directory"].get() 
+        new_db_location = (this_panel.variables["Choose directory"].get()
                             + "/"
                             + this_panel.variables["New database name"].get())
-        panels["input_panel"].variables["Database location"].set(new_db_location)
+        panels["input_panel"].variables["Database location"].set(
+            new_db_location)
         this_panel.destroy()
-    
+
     new_database = Panel()
     new_database.dir_prompts = ("Choose directory",)
     new_database.entries = ("New database name",)
@@ -158,18 +169,30 @@ def make_new_database():
     }
     return new_database
 
+
+def make_processing():
+    processing = Panel()
+
+    processing.changing_text_display = [
+        "Length of text:",
+        "Words processed:",
+        "Current word:",
+    ]
+
+    return processing
+
 def submit_input(input_panel):
     global user_input
-    user_input = dict.fromkeys(input_panel.variables)
+    user_input= dict.fromkeys(input_panel.variables)
     for x in user_input:
-        user_input[x] = input_panel.variables[x].get()
+        user_input[x]= input_panel.variables[x].get()
         if len(user_input[x]) < 1:
-            user_input[x] = None
+            user_input[x]= None
 
     check_essential_fields()
 
 def check_essential_fields():
-    essential_fields = ("Title", "Text location")
+    essential_fields= ("Title", "Text location")
     for x in essential_fields:
         if user_input[x] == None:
             panels["missing_essential"].as_popup_from(root)
@@ -177,7 +200,7 @@ def check_essential_fields():
     check_optional_fields()
 
 def check_optional_fields():
-    optional_fields = ("Author", "Author's gender", "Date")
+    optional_fields= ("Author", "Author's gender", "Date")
     for x in optional_fields:
         if user_input[x] == None:
             panels["incomplete_warning"].as_popup_from(root)
@@ -195,7 +218,8 @@ def database_field_empty():
         return False
 
 def process():
-    print(user_input)
-        
+    panels["processing"].as_popup_from(root)
+    print(panels["processing"].variables)
+
 
 launch_gui()
