@@ -44,18 +44,22 @@ class ownership:
 
 def read(user_input, display):
     words = get_words(user_input["Text location"])
-    #body_parts = get_words("body_parts.txt")
+    body_parts = get_words("body_parts.txt")
     
-    display.variables["Length of text:"].set(len(words))
+    display.variables["Length of text:"].set(len(words)+1)
     display.variables["Words processed:"].set("0")
 
+    parts_cnt = 0
 
     for i in range(len(words)):
-        if i % 45 == 0:
+        if i % 91 == 0 or i == (len(words)-1):
             display.variables["Words processed:"].set(i)
             display.variables["Current word:"].set(words[i])
             display.window.update()
-        print(words[i])
+        if is_possesive(words[i]):
+            if words[i+1] in body_parts:
+                parts_cnt = parts_cnt + 1
+                print(parts_cnt, words[i], words[i+1])
 
 
 def get_words(text_location):
@@ -65,3 +69,9 @@ def get_words(text_location):
     file.close()
     return words
 
+def is_possesive(this_word): # this is very simplistic, add named entities
+    common_possesives = {"his", "her", "their", "my"}
+    if this_word.lower() in common_possesives:
+        return True
+    else:
+        return False
