@@ -50,16 +50,23 @@ def read(user_input, display):
     display.variables["Words processed:"].set("0")
 
     parts_cnt = 0
+    ownerships_cnt =0
 
     for i in range(len(words)):
+        
+        #modulo is arbitrary, sets gui refresh rate
         if i % 91 == 0 or i == (len(words)-1):
             display.variables["Words processed:"].set(i)
             display.variables["Current word:"].set(words[i])
             display.window.update()
+        
+        # finds ownerships
         if is_possesive(words[i]):
+            ownerships_cnt = ownerships_cnt + 1
+
             if words[i+1] in body_parts:
                 parts_cnt = parts_cnt + 1
-                print(parts_cnt, words[i], words[i+1])
+                print(ownerships_cnt, parts_cnt, words[i], words[i+1])
 
 
 def get_words(text_location):
@@ -70,7 +77,7 @@ def get_words(text_location):
     return words
 
 def is_possesive(this_word): # this is very simplistic, add named entities
-    common_possesives = {"his", "her", "their", "my"}
+    common_possesives = {"his", "her", "their", "my", "our", "your"}
     if this_word.lower() in common_possesives:
         return True
     else:
