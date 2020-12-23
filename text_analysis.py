@@ -29,7 +29,7 @@ class Word_tally:
                     + str(self.count)
                     + " occurences, " 
                     + str(self.percentage)
-                    + "%")
+                    + "%)")
 
         
         for i in self.body_parts:
@@ -40,7 +40,11 @@ class Word_tally:
             )
 
     def print(self):
-        for i in sorted(self.body_parts, key= lambda x: self.body_parts[x].count):
+        for i in sorted(
+                self.body_parts, 
+                key= lambda x: self.body_parts[x].count, 
+                reverse=True
+            ):
             self.body_parts[i].print()
 
 
@@ -68,9 +72,12 @@ def read(user_input, display):
     for i in tallies.values():
         i.total()
     
-    for i in sorted(tallies, key=lambda x: tallies[x].total_owned, reverse=True):
-        print("\n\n" + str(tallies[i].total_owned) + " body parts")
-        print(i + " is made up of:\n")
+    for i in sorted(
+        tallies, 
+        key=lambda x: tallies[x].total_owned, 
+        reverse=True
+    ):
+        print("\n" + i + " body is made up of " + str(tallies[i].total_owned) + " body parts:")
         tallies[i].print()
 
 
