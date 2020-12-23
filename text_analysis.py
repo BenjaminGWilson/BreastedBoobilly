@@ -31,8 +31,8 @@ class Word_tally:
         + self.other 
         )
 
-class ownership:
-    def __init__(self, possesive, noun, adjective):
+class Ownership:
+    def __init__(self, possesive, noun): #, adjective):
         self.possesive = possesive
         self.noun = noun
         # self.adjective = adjective    #leave till next version
@@ -44,8 +44,8 @@ def read(user_input, display):
     display.variables["Length of text:"].set(len(words)+1)
     display.variables["Words processed:"].set("0")
 
-    parts_cnt = 0
-    ownerships_cnt =0
+    ownerships_cnt =0 #records total use of possesive pronouns
+    ownerships = []
 
     for i in range(len(words)):
         
@@ -55,25 +55,39 @@ def read(user_input, display):
             display.variables["Current word:"].set(words[i])
             display.window.update()
         
-        # finds ownerships
-        if is_possesive(words[i]):
-            ownerships_cnt = ownerships_cnt + 1
+        finds_ownerships(words, i, ownerships_cnt, body_parts, ownerships)  # how does this manage to affect the ownerships list?????
+    
+    found_possesives = find_possesives(ownerships)
 
-            if words[i+1] in body_parts:
-                parts_cnt = parts_cnt + 1
-                print(ownerships_cnt, parts_cnt, words[i], words[i+1])
+def find_possesives(ownerships):
+
+    for i in ownerships:
+        print(i.possesive)
+    
+
+
+def finds_ownerships(words, i, ownerships_cnt, body_parts, ownerships):
+    if is_possesive(words[i]):
+        ownerships_cnt = ownerships_cnt + 1
+
+        if words[i+1] in body_parts:
+
+            ownerships.append(Ownership(words[i], words[i+1]))
 
 
 def get_words(text_location):
     with io.open(text_location, "r", encoding="utf-8") as file:
-        text = (file.read())
+        
+        #in lower for simplifying later analysis
+        text = file.read().lower()
         words = text.split()
+    
     file.close()
     return words
 
 def is_possesive(this_word): # this is very simplistic, add named entities
     common_possesives = {"his", "her", "their", "my", "our", "your"}
-    if this_word.lower() in common_possesives:
+    if this_word() in common_possesives:
         return True
     else:
         return False
