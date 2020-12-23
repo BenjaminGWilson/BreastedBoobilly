@@ -3,13 +3,45 @@
 # function that counts tuples for each possesive
 # and returns word_tallys[]: total objects, total body, total internal, total external, total each area
 
-class Word_tally:   #though easier to do this as a dict, allows for more complex class functions in future
+class Word_tally:   
     def __init__(self):
         self.total_owned = 0
         self.body_parts = {}    # body part : count
 
     def total(self):
-        print("d")
+        total = 0
+        for i in self.body_parts:
+            total += self.body_parts[i]
+        self.total_owned = total
+        self.make_output_strings()
+    
+    def make_output_strings(self):
+        class Output_string:
+            def __init__(self, noun, part_count, total_part_count):
+                self.noun = noun
+                self.count = part_count
+                self.percentage = round(part_count/(total_part_count/100),2)
+            
+            def print(self):
+                print(
+                    str(self.noun)
+                    + " ("
+                    + str(self.count)
+                    + " occurences, " 
+                    + str(self.percentage)
+                    + "%")
+
+        
+        for i in self.body_parts:
+            self.body_parts[i]= Output_string( 
+                i,
+                self.body_parts[i],
+                self.total_owned
+            )
+
+    def print(self):
+        for i in sorted(self.body_parts, key= lambda x: self.body_parts[x].count):
+            self.body_parts[i].print()
 
 
 class Ownership:
@@ -33,9 +65,15 @@ def read(user_input, display):
     possesives = find_possesives(ownerships)
     tallies = make_tallies(ownerships, possesives)
 
-    # for i in tallies.keys():
-    #     for j in tallies[i].body_parts.keys():
-        #    print(i, j, tallies[i].body_parts[j] )
+    for i in tallies.values():
+        i.total()
+    
+    for i in sorted(tallies, key=lambda x: tallies[x].total_owned, reverse=True):
+        print("\n\n" + str(tallies[i].total_owned) + " body parts")
+        print(i + " is made up of:\n")
+        tallies[i].print()
+
+
 
 def update_display(i, words, display):
     if i % 91 == 0 or i == (len(words)-1):
@@ -91,8 +129,6 @@ def make_tallies(ownerships, possesives):
 
     for i in tallies:
         tallies[i] = Word_tally()
-        tallies[i].body_parts["tits"]=25
-        print(i, tallies[i], tallies[i].body_parts)
 
     for i in ownerships:
         noun = i.noun
@@ -103,10 +139,4 @@ def make_tallies(ownerships, possesives):
         else:
             tallies[owner].body_parts[noun] = 1
     
-    for i in tallies:
-        for j in tallies[i].body_parts:
-            print (i, j, tallies[i].body_parts[j])
-    
     return tallies
-
-
