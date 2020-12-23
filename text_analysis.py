@@ -58,15 +58,22 @@ def read(user_input, display):
         finds_ownerships(words, i, ownerships_cnt, body_parts, ownerships)  # how does this manage to affect the ownerships list?????
     
     found_possesives = find_possesives(ownerships)
+    print(found_possesives)
 
 def find_possesives(ownerships):
 
+    found_possesives = []
     for i in ownerships:
-        print(i.possesive)
+        if i.possesive not in found_possesives:
+            found_possesives.append(i.possesive)
+    
+    return found_possesives
     
 
 
 def finds_ownerships(words, i, ownerships_cnt, body_parts, ownerships):
+    if i == len(words):
+        return
     if is_possesive(words[i]):
         ownerships_cnt = ownerships_cnt + 1
 
@@ -76,7 +83,8 @@ def finds_ownerships(words, i, ownerships_cnt, body_parts, ownerships):
 
 
 def get_words(text_location):
-    with io.open(text_location, "r", encoding="utf-8") as file:
+    
+    with open(text_location) as file:
         
         #in lower for simplifying later analysis
         text = file.read().lower()
@@ -85,9 +93,14 @@ def get_words(text_location):
     file.close()
     return words
 
-def is_possesive(this_word): # this is very simplistic, add named entities
+def is_possesive(this_word): 
     common_possesives = {"his", "her", "their", "my", "our", "your"}
-    if this_word() in common_possesives:
+    if this_word in common_possesives:
         return True
+    
+    #deals with different encodings
+    elif this_word.endswith(("’s", "s’", "\'s", "s\'")):
+        return True
+    
     else:
         return False
