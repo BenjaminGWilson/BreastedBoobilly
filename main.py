@@ -74,7 +74,7 @@ def make_gui_panels():
 
 def make_input_panel(panels):
     panel = Panel()
-    panel.title = "Genital Counter"
+    panel.title = "Breasted"
     panel.entries = [
         "Title",
         "Author",

@@ -4,7 +4,7 @@ to work out whether it's a body part that's being owned. If it is
 a body part then the program records that against the pronoun. 
 
 Once a full count is complete the program does some basic analysis
-of the numbers and then presents graphed summaries of it's findings.
+of the numbers and then presents summaries of it's findings.
 
 The user has the option to export all data to a database, allowing
 in depth and intertextual analysis via SQL.
