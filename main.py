@@ -28,6 +28,7 @@ Text processing and SQL commands live in the text_analysis module.
 # standard modules
 import tkinter as tk
 from functools import partial
+import sqlite3
 
 
 # local modules
