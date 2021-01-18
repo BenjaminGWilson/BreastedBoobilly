@@ -157,7 +157,9 @@ def make_new_database():
     def next_window(this_panel):
         new_db_location = (this_panel.variables["Choose directory"].get()
                             + "/"
-                            + this_panel.variables["New database name"].get())
+                            + this_panel.variables["New database name"].get()
+                            +".db"
+                            )
         panels["input_panel"].variables["Database location"].set(
             new_db_location)
         this_panel.destroy()
@@ -220,7 +222,9 @@ def database_field_empty():
 
 def process():
     panels["processing"].as_popup_from(root)
-    text.read(user_input, panels["processing"])
+    tallies = text.read(user_input, panels["processing"])
+    database = sqlite3.connect(user_input["Database location"])
+    print(database)
 
 
 launch_gui()
