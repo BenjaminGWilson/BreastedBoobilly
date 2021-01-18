@@ -34,6 +34,7 @@ import sqlite3
 # local modules
 from Panel_class import Panel
 import text_analysis as text
+import sqlite3_functions as sqlfuncs
 
 # globals
 root = tk.Tk()
@@ -56,12 +57,14 @@ def make_gui_panels():
         "missing_essential",     # warns essential information hasn't been input
         "missing_db_prompt",    # if user doesn't suggest a db, this prompts them to make a new one
         "new_database",  # prompts for location and title of new database
-        "processing"    # screen to look at as data is processed
+        "processing",    # screen to look at as data is processed
+        "missing_tables" # prompts the user that the chosen db lacks required tables
 
     ]
     panels = dict.fromkeys(panels, Panel())
 
     # format pop ups before the window that calls them, else you call a blank window
+    panels["missing_tables"] = make_missing_tables()
     panels["processing"] = make_processing()
     panels["new_database"] = make_new_database()
     panels["missing_db_prompt"] = make_missing_db_prompt()
@@ -185,6 +188,24 @@ def make_processing():
 
     return processing
 
+def make_missing_tables():
+    missing_tables = Panel()
+    
+    def add_tables_button():
+        missing_tables.destroy()
+        # sqlfuncs.add_tables(sqlfuncs.required_tables)
+
+    missing_tables.legend = (
+        "The selected database is missing one or more necessary tables." 
+        "If this is a new table, select 'Add tables', otherwise abort."
+    )
+    missing_tables.buttons = {
+        "Add tables": add_tables_button,
+        "Abort": missing_tables.destroy
+    }
+
+    return missing_tables
+
 def submit_input(input_panel):
     global user_input
     user_input= dict.fromkeys(input_panel.variables)
@@ -224,7 +245,12 @@ def process():
     panels["processing"].as_popup_from(root)
     tallies = text.read(user_input, panels["processing"])
     database = sqlite3.connect(user_input["Database location"])
-    print(database)
+    
+    state = sqlfuncs.process(tallies, database)
+    
+    if state == "Error: missing tables":
+        panels["missing_tables"].as_popup_from(root)
+
 
 
 launch_gui()
