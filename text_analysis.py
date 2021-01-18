@@ -1,8 +1,3 @@
-# check that db, if supplied, has correct tables (add them if not)
-# function that turns novel into tuples of ownership
-# function that counts tuples for each possesive
-# and returns word_tallys[]: total objects, total body, total internal, total external, total each area
-
 class Word_tally:   
     def __init__(self):
         self.total_owned = 0
@@ -80,6 +75,7 @@ def read(user_input, display):
         print("\n" + i + " body is made up of " + str(tallies[i].total_owned) + " body parts:")
         tallies[i].print()
 
+    return tallies
 
 
 def update_display(i, words, display):
